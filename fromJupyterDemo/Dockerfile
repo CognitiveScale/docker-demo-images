@@ -11,6 +11,7 @@ USER root
 RUN mkdir $JUPYTER_SCRIPTS 
 ADD dexy.yaml dexy_requirements.txt run.sh j2cli.sh setup_git_filters.sh $JUPYTER_SCRIPTS/ 
 ADD page.html /srv/templates/page.html
+ADD bash_kernel_wrapper.py bash_kernel_magics.py /home/jovyan/.ipython/profile_default/startup
 
 RUN cd $JUPYTER_SCRIPTS && \
     wget https://s3.amazonaws.com/c12e-cognitivecloud/notebook/ipynb_git_output_filter.py && \

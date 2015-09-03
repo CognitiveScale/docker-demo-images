@@ -5,13 +5,18 @@ FROM jupyter/demo
 MAINTAINER CognitiveScale <devops@cognitivescale.com>
 
 ENV COGU_HOME=/home/jovyan/notebooks/CogU \
-    JUPYTER_SCRIPTS=/jupyter_scripts 
+    JUPYTER_SCRIPTS=/jupyter_scripts \
+    GIT_REPO_URL=https://github.com/CognitiveScale/docker-demo-images/tree/relpath-scripts \
+    JUPYTER_STARTUP_DIR=/home/jovyan/.ipython/profile_default/startup
 
+# For Jupyter 4, there is no profile_default.  Instead there is ~/.jupyter and need a hook to run scripts
 
 USER root
-COPY dexy.yaml dexy_requirements.txt run.sh j2cli.sh setup_git_filters.sh $JUPYTER_SCRIPTS/ 
-ADD page.html /srv/templates/page.html
-ADD bash_kernel_wrapper.py bash_kernel_magics.py /home/jovyan/.ipython/profile_default/startup
+#COPY dexy.yaml dexy_requirements.txt run.sh j2cli.sh setup_git_filters.sh $JUPYTER_SCRIPTS/ 
+ADD https://github.com/CognitiveScale/docker-demo-images/tree/relpath-scripts/scripts $JUPYTER_SCRIPTS/
+ADD https://raw.githubusercontent.com/CognitiveScale/docker-demo-images/relpath-scripts/scripts/page.html /srv/templates/page.html
+#ADD page.html /srv/templates/page.html
+ADD $GIT_REPO_URL/scripts/bash_kernel_wrapper.py $GIT_REPO_URL/scripts/stateful_bash_magics.py $JUPYTER_STARTUP_DIR
 
 RUN cd $JUPYTER_SCRIPTS && \
     wget https://s3.amazonaws.com/c12e-cognitivecloud/notebook/ipynb_git_output_filter.py && \

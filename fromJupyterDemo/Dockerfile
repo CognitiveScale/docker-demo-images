@@ -5,11 +5,11 @@ FROM jupyter/demo
 MAINTAINER CognitiveScale <devops@cognitivescale.com>
 
 ENV COGU_HOME=/home/jovyan/notebooks/CogU \
-    JUPYTER_SCRIPTS=/jupyter_scripts
+    JUPYTER_SCRIPTS=/jupyter_scripts 
+
 
 USER root
-RUN mkdir $JUPYTER_SCRIPTS 
-ADD dexy.yaml dexy_requirements.txt run.sh j2cli.sh setup_git_filters.sh $JUPYTER_SCRIPTS/ 
+COPY dexy.yaml dexy_requirements.txt run.sh j2cli.sh setup_git_filters.sh $JUPYTER_SCRIPTS/ 
 ADD page.html /srv/templates/page.html
 ADD bash_kernel_wrapper.py bash_kernel_magics.py /home/jovyan/.ipython/profile_default/startup
 
